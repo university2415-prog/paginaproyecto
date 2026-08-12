@@ -73,7 +73,7 @@ $pedidos = $conn->query("SELECT p.*, u.nombre as cliente, u.correo FROM pedidos 
     }
     .admin-card {
       background: white;
-      color: #111827;
+      color: var(--accent);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 24px;
@@ -98,12 +98,12 @@ $pedidos = $conn->query("SELECT p.*, u.nombre as cliente, u.correo FROM pedidos 
       padding: 12px;
       border-bottom: 1px solid #eee;
       text-align: left;
-      color: #111827;
+      color: var(--accent);
     }
     .admin-table th {
       background: #faf8f5;
       font-weight: 700;
-      color: #111827;
+      color: var(--accent-dark);
     }
     .form-grid {
       display: grid;

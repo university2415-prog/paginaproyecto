@@ -28,10 +28,10 @@ $success = $stmt->execute();
 $stmt->close();
 
 if ($success) {
-    header('Location: contacto.html?status=success');
+    header('Location: contacto.php?status=success');
     exit;
 }
 
 error_log('Error guardando contacto: ' . $conn->error);
-header('Location: contacto.html?status=error');
+header('Location: contacto.php?status=error');
 exit;

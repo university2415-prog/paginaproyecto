@@ -1,5 +1,8 @@
 <?php
 header("Content-Type: application/json; charset=UTF-8");
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once 'conexion.php';
 
 $raw = file_get_contents('php://input');
