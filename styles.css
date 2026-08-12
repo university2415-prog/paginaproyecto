@@ -283,7 +283,8 @@ button[type='submit']:hover {
 }
 
 .order-card {
-  background: rgba(15, 23, 42, 0.98);
+  background: #111827;
+  border: 1px solid rgba(148, 163, 184, 0.18);
 }
 
 .order-card .order-header {
@@ -294,27 +295,32 @@ button[type='submit']:hover {
   width: 100%;
   border-collapse: collapse;
   margin-top: 18px;
+  background: rgba(15, 23, 42, 0.98);
+  border-radius: 22px;
+  overflow: hidden;
 }
 
 .order-details-table th,
 .order-details-table td {
-  padding: 14px 16px;
+  padding: 16px 18px;
   color: var(--text);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
 }
 
 .order-details-table th {
-  color: var(--muted);
+  color: rgba(203, 213, 225, 0.9);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  background: rgba(15, 23, 42, 0.95);
 }
 
 .order-details-table td {
   color: #e2e8f0;
 }
 
-.order-details-table tr:hover td {
-  background: rgba(56, 189, 248, 0.06);
+.order-details-table tbody tr:hover td {
+  background: rgba(56, 189, 248, 0.08);
 }
 
 .dish-card {
@@ -692,6 +698,20 @@ button[type='submit'] {
 .order-details-table th,
 .order-details-table td {
   border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  color: var(--text);
+}
+
+.order-details-table th {
+  color: rgba(203, 213, 225, 0.85);
+  font-weight: 700;
+}
+
+.order-details-table td {
+  color: #e2e8f0;
+}
+
+.order-details-table tbody tr:hover td {
+  background: rgba(56, 189, 248, 0.07);
 }
 
 .order-details-table tbody tr:last-child td {
