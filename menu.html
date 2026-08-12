@@ -98,7 +98,7 @@
           const origen = p.origen || 'Internacional';
           const rating = p.rating || '4.8';
           const precio = parseFloat(p.precio).toFixed(2);
-          const imagen = p.imagen ? p.imagen : obtenerImagenProducto(p.nombre);
+          const imagen = normalizeImagePath(p.imagen ? p.imagen : obtenerImagenProducto(p.nombre));
 
           html += `
             <article class="dish-card">
@@ -152,6 +152,13 @@
 
         const producto = productosConImagen.find(item => item.nombre === nombre);
         return producto ? producto.imagen : 'img/Quiche Lorraine.png';
+      }
+
+      function normalizeImagePath(path) {
+        if (!path) {
+          return 'img/Quiche Lorraine.png';
+        }
+        return path.startsWith('img/') ? path : 'img/' + path;
       }
 
       function agregarAlCarrito(producto_id, nombre, precio) {
