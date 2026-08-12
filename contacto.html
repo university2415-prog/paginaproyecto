@@ -31,7 +31,7 @@
         </article>
 
         <article class="card">
-          <form method="POST" action="guardar_contacto.php">
+          <form id="contactForm">
             <div id="formMessage" style="margin-bottom: 18px; padding: 12px; border-radius: 10px; display: none;"></div>
 
             <label for="name">Nombre</label>
@@ -45,6 +45,35 @@
 
             <button type="submit">Enviar</button>
           </form>
+          <script>
+            const API_BASE = 'http://localhost:3000';
+            document.getElementById('contactForm').addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const nombre = document.getElementById('name').value.trim();
+              const correo = document.getElementById('email').value.trim();
+              const mensaje = document.getElementById('message').value.trim();
+              const msgEl = document.getElementById('formMessage');
+
+              if (!nombre || !correo || !mensaje) {
+                msgEl.style.display = 'block'; msgEl.style.background = '#fee2e2'; msgEl.textContent = 'Completa todos los campos.'; return;
+              }
+
+              try {
+                const res = await fetch(API_BASE + '/contactos', {
+                  method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre, correo, mensaje })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                  msgEl.style.display = 'block'; msgEl.style.background = '#ecfdf5'; msgEl.textContent = 'Mensaje enviado correctamente.';
+                  e.target.reset();
+                } else {
+                  msgEl.style.display = 'block'; msgEl.style.background = '#fee2e2'; msgEl.textContent = data.message || 'Error al enviar mensaje.';
+                }
+              } catch (err) {
+                msgEl.style.display = 'block'; msgEl.style.background = '#fee2e2'; msgEl.textContent = 'Error de red.';
+              }
+            });
+          </script>
         </article>
       </section>
     </main>

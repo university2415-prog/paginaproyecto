@@ -64,7 +64,8 @@
       }
 
       try {
-        const response = await fetch('login.php', {
+        const API_BASE = 'http://localhost:3000';
+        const response = await fetch(API_BASE + '/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user: userVal, password: passVal })
@@ -72,6 +73,7 @@
         const res = await response.json();
 
         if (res.success) {
+          localStorage.setItem('usuario', JSON.stringify(res.usuario));
           alert('¡Bienvenido ' + res.usuario.nombre + '!');
           window.location.href = 'menu.html';
         } else {

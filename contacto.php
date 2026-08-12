@@ -1,16 +1,3 @@
-<?php
-$status = $_GET['status'] ?? '';
-$message = '';
-$messageClass = '';
-
-if ($status === 'success') {
-    $message = 'Mensaje enviado correctamente. Gracias por contactarnos.';
-    $messageClass = 'success-message';
-} elseif ($status === 'error') {
-    $message = 'Ocurrió un error al enviar tu mensaje. Intenta de nuevo.';
-    $messageClass = 'error-message';
-}
-?>
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -27,7 +14,7 @@ if ($status === 'success') {
       <nav class="top-nav" style="margin-bottom: 24px;">
         <a href="index.html">Inicio</a>
         <a href="menu.html">Menú</a>
-        <a href="contacto.php" class="active">Contacto</a>
+        <a href="contacto.html" class="active">Contacto</a>
       </nav>
 
       <section class="page-intro">
@@ -44,26 +31,63 @@ if ($status === 'success') {
         </article>
 
         <article class="card">
-          <form method="POST" action="guardar_contacto.php">
-            <?php if ($message): ?>
-              <div class="form-alert <?= htmlspecialchars($messageClass, ENT_QUOTES, 'UTF-8') ?>">
-                <?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?>
-              </div>
-            <?php endif; ?>
+          <div id="formMessage" style="margin-bottom: 18px; padding: 12px; border-radius: 10px; display: none;"></div>
 
-            <label for="name">Nombre</label>
-            <input id="name" name="nombre" type="text" required placeholder="Tu nombre" />
+          <label for="name">Nombre</label>
+          <input id="name" name="nombre" type="text" required placeholder="Tu nombre" />
 
-            <label for="email">Correo</label>
-            <input id="email" name="correo" type="email" required placeholder="tu@email.com" />
+          <label for="email">Correo</label>
+          <input id="email" name="correo" type="email" required placeholder="tu@email.com" />
 
-            <label for="message">Mensaje</label>
-            <textarea id="message" name="mensaje" rows="4" required placeholder="Cuéntanos qué te gustaría probar..."></textarea>
+          <label for="message">Mensaje</label>
+          <textarea id="message" name="mensaje" rows="4" required placeholder="Cuéntanos qué te gustaría probar..."></textarea>
 
-            <button type="submit">Enviar</button>
-          </form>
+          <button id="sendBtn">Enviar</button>
         </article>
       </section>
     </main>
+
+    <script>
+      const API_BASE = 'http://localhost:3000';
+      document.getElementById('sendBtn').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const nombre = document.getElementById('name').value.trim();
+        const correo = document.getElementById('email').value.trim();
+        const mensaje = document.getElementById('message').value.trim();
+        const msgEl = document.getElementById('formMessage');
+
+        if (!nombre || !correo || !mensaje) {
+          msgEl.style.display = 'block';
+          msgEl.style.background = '#fee2e2';
+          msgEl.textContent = 'Completa todos los campos.';
+          return;
+        }
+
+        try {
+          const res = await fetch(API_BASE + '/contactos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombre, correo, mensaje })
+          });
+          const data = await res.json();
+          if (res.ok) {
+            msgEl.style.display = 'block';
+            msgEl.style.background = '#ecfdf5';
+            msgEl.textContent = 'Mensaje enviado correctamente. Gracias por contactarnos.';
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('message').value = '';
+          } else {
+            msgEl.style.display = 'block';
+            msgEl.style.background = '#fee2e2';
+            msgEl.textContent = data.message || 'Ocurrió un error al enviar tu mensaje.';
+          }
+        } catch (err) {
+          msgEl.style.display = 'block';
+          msgEl.style.background = '#fee2e2';
+          msgEl.textContent = 'Error de red. Intenta de nuevo.';
+        }
+      });
+    </script>
   </body>
 </html>

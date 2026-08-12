@@ -29,7 +29,7 @@
         <nav class="top-nav" style="margin: 0 20px;">
           <a href="menu.html" class="active">Menú</a>
           <a href="pedidos.php">Mis Pedidos</a>
-          <a href="contacto.php">Contacto</a>
+          <a href="contacto.html">Contacto</a>
           <a href="admin.php">Administración</a>
         </nav>
 
@@ -39,7 +39,7 @@
 
         <div class="navbar-actions">
           <a href="carrito.html" class="cart-btn">🛒</a>
-          <button class="logout-btn" onclick="location.href='logout.php'">Salir</button>
+          <button class="logout-btn" onclick="clientLogout()">Salir</button>
         </div>
       </div>
     </header>
@@ -65,10 +65,11 @@
 
       async function cargarProductos() {
         try {
-          const response = await fetch('obtener_productos.php');
-          const data = await response.json();
-          if (data.success && data.productos) {
-            todosLosProductos = data.productos;
+          const API_BASE = 'http://localhost:3000';
+          const response = await fetch(API_BASE + '/productos');
+          const productos = await response.json();
+          if (Array.isArray(productos)) {
+            todosLosProductos = productos;
             mostrarProductos(todosLosProductos);
           }
         } catch (e) {
@@ -166,6 +167,11 @@
         carrito.push({ producto_id, nombre, precio: parseFloat(precio), id: Date.now() });
         localStorage.setItem('carrito', JSON.stringify(carrito));
         alert('¡' + nombre + ' agregado al carrito!');
+      }
+
+      function clientLogout() {
+        localStorage.removeItem('usuario');
+        window.location.href = 'index.html';
       }
 
       document.addEventListener('DOMContentLoaded', cargarProductos);

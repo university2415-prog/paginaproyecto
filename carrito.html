@@ -28,7 +28,7 @@
 
         <div class="navbar-actions" style="margin-left: auto;">
           <a href="carrito.html" class="cart-btn">🛒</a>
-          <button class="logout-btn" onclick="location.href='logout.php'">Salir</button>
+          <button class="logout-btn" onclick="clientLogout()">Salir</button>
         </div>
       </div>
     </header>
@@ -206,15 +206,24 @@
         const total = parseFloat((subtotal + impuestos).toFixed(2));
 
         try {
-          const response = await fetch('guardar_pedido.php', {
+          const API_BASE = 'http://localhost:3000';
+          const response = await fetch(API_BASE + '/pedidos', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ items, subtotal, impuestos, total })
           });
           const result = await response.json();
 
-          if (result.success) {
+          if (result && result.id) {
+            alert('Tu pedido se guardó correctamente en la base de datos. ID de pedido: ' + result.id);
+            localStorage.setItem('carrito', JSON.stringify([]));
+            cargarCarrito();
+          } else if (result && result.pedido_id) {
             alert('Tu pedido se guardó correctamente en la base de datos. ID de pedido: ' + result.pedido_id);
+            localStorage.setItem('carrito', JSON.stringify([]));
+            cargarCarrito();
+          } else if (result.success) {
+            alert(result.message || 'Pedido registrado');
             localStorage.setItem('carrito', JSON.stringify([]));
             cargarCarrito();
           } else {
