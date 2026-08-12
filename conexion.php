@@ -110,6 +110,18 @@ CREATE TABLE IF NOT EXISTS contactos (
 
 if (!$conn->query($createContactosTable)) {
     error_log("Error creando tabla contactos: " . $conn->error);
+} else {
+    $removeDuplicateContactsSql = "
+        DELETE c1 FROM contactos c1
+        INNER JOIN contactos c2
+          ON c1.id > c2.id
+         AND COALESCE(c1.nombre,'') = COALESCE(c2.nombre,'')
+         AND COALESCE(c1.correo,'') = COALESCE(c2.correo,'')
+         AND COALESCE(c1.mensaje,'') = COALESCE(c2.mensaje,'')
+    ";
+    if (!$conn->query($removeDuplicateContactsSql)) {
+        error_log("Error eliminando duplicados de contactos: " . $conn->error);
+    }
 }
 
 function ensureColumnExists($conn, $table, $column, $definition) {
